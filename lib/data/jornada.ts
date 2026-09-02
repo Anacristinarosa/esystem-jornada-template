@@ -26,6 +26,10 @@ export interface ProgressoConteudo {
   concluido_em: string | null;
 }
 
+export interface EstacaoComConteudos extends Estacao {
+  conteudos: Conteudo[];
+}
+
 export async function getEstacoes(): Promise<Estacao[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -40,6 +44,40 @@ export async function getEstacoes(): Promise<Estacao[]> {
   return data ?? [];
 }
 
+export async function getEstacoesComConteudos(
+  incluirNaoPublicadas = false,
+): Promise<EstacaoComConteudos[]> {
+  const supabase = await createClient();
+
+  let queryEstacoes = supabase.from("estacoes").select("*").order("numero", { ascending: true });
+  if (!incluirNaoPublicadas) queryEstacoes = queryEstacoes.eq("publicada", true);
+
+  const [estacoesRes, conteudosRes] = await Promise.all([
+    queryEstacoes,
+    supabase.from("conteudos").select("*").order("numero", { ascending: true }),
+  ]);
+
+  if (estacoesRes.error) {
+    console.error("getEstacoesComConteudos (estacoes):", estacoesRes.error.message);
+    return [];
+  }
+  if (conteudosRes.error) {
+    console.error("getEstacoesComConteudos (conteudos):", conteudosRes.error.message);
+  }
+
+  const conteudosPorEstacao = new Map<string, Conteudo[]>();
+  for (const c of conteudosRes.data ?? []) {
+    const arr = conteudosPorEstacao.get(c.estacao_id) ?? [];
+    arr.push(c);
+    conteudosPorEstacao.set(c.estacao_id, arr);
+  }
+
+  return (estacoesRes.data ?? []).map((e) => ({
+    ...e,
+    conteudos: conteudosPorEstacao.get(e.id) ?? [],
+  }));
+}
+
 export async function getEstacaoPorSlug(slug: string): Promise<Estacao | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -49,6 +87,25 @@ export async function getEstacaoPorSlug(slug: string): Promise<Estacao | null> {
     .single();
   if (error) return null;
   return data;
+}
+
+export async function getConteudo(
+  estacaoSlug: string,
+  aulaNumero: number,
+): Promise<{ estacao: Estacao; conteudo: Conteudo } | null> {
+  const estacao = await getEstacaoPorSlug(estacaoSlug);
+  if (!estacao) return null;
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("conteudos")
+    .select("*")
+    .eq("estacao_id", estacao.id)
+    .eq("numero", aulaNumero)
+    .single();
+  if (error || !data) return null;
+
+  return { estacao, conteudo: data };
 }
 
 export async function getConteudosDaEstacao(estacaoId: string): Promise<Conteudo[]> {

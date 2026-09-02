@@ -21,5 +21,5 @@ export async function alternarProgresso(conteudoId: string, concluido: boolean) 
   );
   if (error) throw error;
 
-  revalidatePath("/jornada");
+  revalidatePath("/jornada", "layout");
 }

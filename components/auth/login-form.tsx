@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -62,12 +61,6 @@ export function LoginForm() {
       <Button type="submit" size="lg" className="w-full" disabled={aCarregar}>
         {aCarregar ? "A entrar…" : "Entrar"}
       </Button>
-      <p className="text-center text-sm text-ink-soft">
-        Ainda não tens conta?{" "}
-        <Link href="/registo" className="text-gold-700 hover:text-gold-600 font-medium">
-          Criar conta
-        </Link>
-      </p>
     </form>
   );
 }

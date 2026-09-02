@@ -1,11 +1,21 @@
 import { Logo } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
+import { getUtilizador } from "@/lib/auth";
+import { PLATAFORMA } from "@/lib/config";
 
 interface NavProps {
   autenticado?: boolean;
 }
 
-export function Nav({ autenticado = false }: NavProps) {
+export async function Nav({ autenticado = false }: NavProps) {
+  let mentora = false;
+  if (autenticado) {
+    const user = await getUtilizador();
+    const emailMentora =
+      process.env.NEXT_PUBLIC_MENTORA_EMAIL ?? PLATAFORMA.mentora.email;
+    mentora = user?.email === emailMentora;
+  }
+
   return (
     <nav
       className="border-b backdrop-blur-sm"
@@ -22,6 +32,11 @@ export function Nav({ autenticado = false }: NavProps) {
               <Button href="/jornada" variant="ghost" size="sm">
                 A minha jornada
               </Button>
+              {mentora && (
+                <Button href="/admin" variant="ghost" size="sm">
+                  Painel
+                </Button>
+              )}
               <form action="/api/auth/logout" method="post">
                 <Button variant="outline" size="sm" type="submit">
                   Sair
@@ -29,14 +44,9 @@ export function Nav({ autenticado = false }: NavProps) {
               </form>
             </>
           ) : (
-            <>
-              <Button href="/login" variant="ghost" size="sm">
-                Entrar
-              </Button>
-              <Button href="/registo" size="sm">
-                Criar conta
-              </Button>
-            </>
+            <Button href="/login" size="sm">
+              Entrar
+            </Button>
           )}
         </div>
       </div>

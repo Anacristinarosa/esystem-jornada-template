@@ -2,23 +2,25 @@
 // CONFIGURAÇÃO DA TUA PLATAFORMA
 // ------------------------------------------------------------
 // A skill /esystem-jornada preenche isto a partir do teu
-// 'eSystem — Desenho (v1).md'. Podes editar à mão depois.
+// desenho da Missão 2 (ou perguntando-te ali mesmo).
+// Edita à mão sempre que quiseres afinar textos.
 // ============================================================
 
 export const PLATAFORMA = {
-  /** Nome que aparece no topo e no separador do browser */
+  /** Nome que aparece no topo, no separador do browser e como título grande no login */
   nome: "eSystem",
 
   /** Iniciais (1-3 letras) para o logo pequeno */
   iniciais: "eS",
 
-  /** Frase-âncora do primeiro ecrã — 1 linha na tua voz */
-  fraseAncora:
-    "A tua transformação, com sistema por baixo.",
+  /** Marca-mãe (chapéu pequeno acima do nome grande no login) — deixa string vazia para esconder */
+  marcaMae: "A MINHA ESCOLA",
 
-  /** Subtítulo curto que aparece por baixo da frase-âncora na landing */
-  subtitulo:
-    "Um método próprio, uma jornada guiada, uma comunidade de founders.",
+  /** Frase-âncora — não aparece no login, mas fica guardada para landing ou emails */
+  fraseAncora: "A tua transformação, com sistema por baixo.",
+
+  /** Subtítulo curto */
+  subtitulo: "Um método próprio, uma jornada guiada, uma comunidade de founders.",
 
   /** Nome de quem tu és — a mentora atrás da plataforma */
   mentora: {

@@ -1,9 +1,11 @@
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
+import { AdicionarAluna } from "@/components/admin/adicionar-aluna";
 import { requerMentora } from "@/lib/auth";
 import { getAlunasComProgresso } from "@/lib/data/admin";
 import { formatarData } from "@/lib/utils";
-import { Users, TrendingUp, Clock } from "lucide-react";
+import { Users, TrendingUp, Clock, Layers, Calendar } from "lucide-react";
+import Link from "next/link";
 
 export const metadata = { title: "Painel da mentora" };
 
@@ -36,6 +38,31 @@ export default async function AdminPage() {
               As tuas alunas
             </h1>
           </div>
+
+          <div className="flex flex-wrap gap-3 mb-8">
+            <Link
+              href="/admin/conteudos"
+              className="inline-flex items-center gap-3 px-5 py-3 rounded-xl bg-cream-50 gold-border gold-shadow hover:bg-gold-50 transition-all group"
+            >
+              <Layers className="w-4 h-4 text-gold-600" />
+              <span className="text-sm font-medium text-ink">Gerir estações e aulas</span>
+              <span className="text-xs text-ink-faint ml-2 group-hover:text-gold-700 transition-colors">
+                →
+              </span>
+            </Link>
+            <Link
+              href="/admin/agenda"
+              className="inline-flex items-center gap-3 px-5 py-3 rounded-xl bg-cream-50 gold-border gold-shadow hover:bg-gold-50 transition-all group"
+            >
+              <Calendar className="w-4 h-4 text-gold-600" />
+              <span className="text-sm font-medium text-ink">Gerir agenda</span>
+              <span className="text-xs text-ink-faint ml-2 group-hover:text-gold-700 transition-colors">
+                →
+              </span>
+            </Link>
+          </div>
+
+          <AdicionarAluna />
 
           <div className="grid gap-4 sm:grid-cols-3 mb-10">
             <MetricCard
@@ -79,11 +106,17 @@ export default async function AdminPage() {
                   </tr>
                 ) : (
                   alunas.map((a) => (
-                    <tr key={a.id} className="border-b border-gold-100 last:border-0">
+                    <tr
+                      key={a.id}
+                      className="border-b border-gold-100 last:border-0 hover:bg-gold-50/40 transition-colors"
+                    >
                       <Td>
-                        <span className="font-serif italic text-lg">
+                        <Link
+                          href={`/admin/alunas/${a.id}`}
+                          className="font-serif italic text-lg text-ink hover:text-gold-700 transition-colors"
+                        >
                           {a.nome ?? "—"}
-                        </span>
+                        </Link>
                       </Td>
                       <Td>
                         <span className="text-sm text-ink-soft">{a.email}</span>
@@ -99,9 +132,12 @@ export default async function AdminPage() {
                         </span>
                       </Td>
                       <Td right>
-                        <span className="font-serif italic text-base text-gold-700">
+                        <Link
+                          href={`/admin/alunas/${a.id}`}
+                          className="font-serif italic text-base text-gold-700 hover:underline"
+                        >
                           {a.conteudos_feitos}/{a.conteudos_totais}
-                        </span>
+                        </Link>
                       </Td>
                     </tr>
                   ))
