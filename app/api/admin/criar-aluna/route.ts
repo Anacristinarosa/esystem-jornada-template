@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requerMentora } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { PLATAFORMA } from "@/lib/config";
 
 export async function POST(req: Request) {
   await requerMentora();
@@ -11,7 +12,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ erro: "Email obrigatório." }, { status: 400 });
   }
 
-  const password = process.env.PASSWORD_INICIAL ?? "ecircle2026";
+  const password = process.env.PASSWORD_INICIAL ?? PLATAFORMA.passwordInicial;
   const admin = createAdminClient();
 
   const { data, error } = await admin.auth.admin.createUser({
