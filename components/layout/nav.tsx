@@ -37,6 +37,9 @@ export async function Nav({ autenticado = false }: NavProps) {
                   Painel
                 </Button>
               )}
+              <Button href="/definicoes" variant="ghost" size="sm">
+                Definições
+              </Button>
               <form action="/api/auth/logout" method="post">
                 <Button variant="outline" size="sm" type="submit">
                   Sair
