@@ -128,3 +128,13 @@ select e.id, 1, 'Vídeo de abertura',
 from public.estacoes e
 where e.slug = 'primeira-estacao'
 on conflict do nothing;
+
+-- Supabase, desde 30/10/2026: as tabelas novas já não recebem permissões sozinhas.
+-- Estas linhas repõem o comportamento de antes (a proteção continua a ser feita pelo RLS de cada tabela).
+grant usage on schema public to anon, authenticated, service_role;
+grant all on all tables in schema public to anon, authenticated, service_role;
+grant all on all sequences in schema public to anon, authenticated, service_role;
+grant all on all routines in schema public to anon, authenticated, service_role;
+alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
+alter default privileges in schema public grant all on sequences to anon, authenticated, service_role;
+alter default privileges in schema public grant all on routines to anon, authenticated, service_role;
