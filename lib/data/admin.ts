@@ -26,7 +26,8 @@ export async function getAlunasComProgresso(): Promise<AlunaResumo[]> {
     .select("*", { count: "exact", head: true });
   const conteudosTotais = totaisRaw ?? 0;
 
-  const { data: alunas, error } = await supabase
+  // A view tem emails de todas as contas: só a chave de servidor a lê (a página já exige a mentora).
+  const { data: alunas, error } = await createAdminClient()
     .from("alunas_view")
     .select("*")
     .order("criada_em", { ascending: false });

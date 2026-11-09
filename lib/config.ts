@@ -28,8 +28,6 @@ export const PLATAFORMA = {
     email: "tu@teudominio.pt",
   },
 
-  /** Password inicial que a mentora dá às alunas para o primeiro login. */
-  passwordInicial: "muda-me-2026",
 
   /** Vocabulário que usas para os blocos da tua jornada. */
   vocabulario: {

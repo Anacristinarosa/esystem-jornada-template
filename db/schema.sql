@@ -138,3 +138,8 @@ grant all on all routines in schema public to anon, authenticated, service_role;
 alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
 alter default privileges in schema public grant all on sequences to anon, authenticated, service_role;
 alter default privileges in schema public grant all on routines to anon, authenticated, service_role;
+
+-- Segurança: a lista de contas (com emails) não pode ser lida com a chave pública
+-- nem por outras utilizadoras: só a chave de servidor, que a app usa depois de exigir a mentora.
+revoke all on public.alunas_view from anon, authenticated;
+grant select on public.alunas_view to service_role;
